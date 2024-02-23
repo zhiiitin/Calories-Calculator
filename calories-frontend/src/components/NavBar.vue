@@ -8,32 +8,35 @@
           <router-link
             class="custom-link"
             to="/"
+            icon="mdi-home"
           >
-            <font-awesome-icon :icon="['fas', 'house']" />
+            <v-icon
+                  icon="mdi-home"
+                />
           </router-link>
         </v-btn>
         <v-spacer />
-        <!-- <v-btn>
+        <v-btn>
           <router-link
             class="custom-link"
             to="/bmi"
           >
             <span>健康計算機</span>
           </router-link>
-        </v-btn> -->
-        <!-- <v-btn>
+        </v-btn> 
+        <v-btn>
             <router-link class="custom-link" to="/">
               <span>每日熱量紀錄</span>
             </router-link>
-          </v-btn> -->
-        <!-- <v-btn>
+          </v-btn>
+        <v-btn>
           <router-link
             class="custom-link"
             to="/profile"
           >
             <span>個人資料</span>
           </router-link>
-        </v-btn> -->
+        </v-btn>
         <v-btn>
           <router-link
             class="custom-link"
@@ -46,17 +49,17 @@
       </v-container>
     </v-app-bar>
   </template>
-  <script setup>
-  import { useStore } from 'vuex';
-  import { removeLocalStorageItem } from '@/service/authService';
-  
-  const store = useStore();
-  
-  const logout = () => {
-    store.commit('setUserData', null);
-    removeLocalStorageItem('jwtToken');
-  };
-  </script>
+<script setup>
+import { removeLocalStorageItem } from '@/service/axios';
+import { useStore } from 'vuex';
+
+const store = useStore();
+
+const logout = () => {
+  store.commit('setUserData', null);
+  removeLocalStorageItem('jwtToken');
+};
+</script>
   <style scope>
   .custom-link,
   .custom-link:hover {
@@ -66,4 +69,3 @@
     color: rgba(0, 0, 0, 87%);
   }
   </style>
-  

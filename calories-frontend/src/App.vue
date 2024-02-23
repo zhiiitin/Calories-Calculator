@@ -1,13 +1,19 @@
 <template>
   <v-app>
-    <v-main>
-      <NavBar />
+    <v-main> 
+      <NavBar v-if="isUserLoggedIn"/>
       <RouterView />
     </v-main>
   </v-app>
 </template>
 <script setup>
+import { computed } from 'vue';
 import NavBar from './components/NavBar.vue';
+import { useStore } from 'vuex';
+
+const store = useStore();
+const isUserLoggedIn = computed(() => store.getters['isUserLoggedIn']);
+
 </script>
 <style scoped>
 header {

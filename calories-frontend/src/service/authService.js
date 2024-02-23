@@ -1,24 +1,14 @@
 import axios from './axios';
+import { setJwtToken } from './axios';
 
-export function getJwtToken() {
-  return localStorage.getItem('jwtToken');
+export function setUserData(userData) {
+  const user = JSON.stringify(userData);
+  localStorage.setItem('user', user);
 }
 
-export function setJwtToken(jwt) {
-  localStorage.setItem('jwtToken', jwt);
+export function getUserData() {
+  return JSON.parse(localStorage.getItem('user'));
 }
-
-export function removeLocalStorageItem(item) {
-  localStorage.removeItem(item);
-}
-// export function setUserData(userData) {
-//   const user = JSON.stringify(userData);
-//   localStorage.setItem('user', user);
-// }
-
-// export function getUserData() {
-//   return JSON.parse(localStorage.getItem('user'));
-// }
 
 export async function registerUser(email, userName, password) {
   const data = {

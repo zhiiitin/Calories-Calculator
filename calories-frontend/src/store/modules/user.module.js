@@ -1,9 +1,9 @@
-import { registerUser, login } from '@/service/authService';
+import { registerUser, login, setUserData, getUserData } from '@/service/authService';
 
 export default {
   state() {
     return {
-      user: null,
+      user: getUserData() || null,
     };
   },
   mutations: {
@@ -24,9 +24,15 @@ export default {
       const { email, password } = data;
       const response = await login(email, password);
       if (response.status === 200) {
+        setUserData(response.data.user);
         commit('setUserData', response.data.user);
       }
       return response;
+    },
+  },
+  getters: {
+    isUserLoggedIn(state) {
+      return state.user !== null;
     },
   },
 };

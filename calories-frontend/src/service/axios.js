@@ -1,7 +1,22 @@
 import axios from 'axios';
 
-const instance = axios.create({
-    headers: {'Content-Type': 'application/json'}
-  });
+export function getJwtToken() {
+  return localStorage.getItem('jwtToken');
+}
 
- export default instance;
+export function setJwtToken(jwt) {
+  localStorage.setItem('jwtToken', jwt);
+}
+
+export function removeLocalStorageItem(item) {
+  localStorage.removeItem(item);
+}
+
+const instance = axios.create({
+  withCredentials:true,
+  headers: { 
+    'Content-Type': 'application/json',
+   },
+});
+
+export default instance;
