@@ -15,11 +15,12 @@
     "@vuelidate/validators": "^2.0.4",
     "apexcharts": "^3.45.2",
     "axios": "^1.6.7",
+    "dayjs": "^1.11.10",
     "pinia": "^2.1.7",
     "vue": "^3.4.15",
     "vue-router": "^4.2.5",
     "vue3-apexcharts": "^1.4.4",
-    "vuetify": "^3.5.2",
+    "vuetify": "^3.5.4",
     "vuex": "^4.0.2"
   },
   "devDependencies": {
@@ -29,9 +30,9 @@
     "@vitejs/plugin-vue-jsx": "^3.1.0",
     "@vue/eslint-config-prettier": "^8.0.0",
     "eslint": "^8.56.0",
-    "eslint-plugin-vue": "^9.21.1",
     "eslint-config-airbnb": "19.0.4",
     "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-vue": "^9.21.1",
     "prettier": "^3.0.3",
     "vite": "^5.0.11"
   }

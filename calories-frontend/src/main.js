@@ -5,6 +5,10 @@ import { createPinia } from 'pinia';
 
 import router from './router';
 
+// dayjs
+import dayjs from 'dayjs';
+import 'dayjs/locale/zh-tw';
+
 // Vuetify
 import 'vuetify/styles';
 import { createVuetify } from 'vuetify';
@@ -23,6 +27,8 @@ const vuetify = createVuetify({
     defaultSet: 'mdi',
   },
 });
+
+dayjs.locale('zh-tw');
 
 const app = createApp(App);
 

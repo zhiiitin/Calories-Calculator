@@ -17,22 +17,22 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/LoginView.vue'),
     },
-    // {
-    //   path: '/bmi',
-    //   name: 'login',
-    //   // route level code-splitting
-    //   // this generates a separate chunk (About.[hash].js) for this route
-    //   // which is lazy-loaded when the route is visited.
-    //   component: () => import('../views/loginPage.vue')
-    // },
-    // {
-    //   path: '/profile',
-    //   name: 'login',
-    //   // route level code-splitting
-    //   // this generates a separate chunk (About.[hash].js) for this route
-    //   // which is lazy-loaded when the route is visited.
-    //   component: () => import('../views/loginPage.vue')
-    // }
+    {
+      path: '/bmiCalculator',
+      name: 'bmiCalculator',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/BmiCalculatorView.vue')
+    },
+    {
+      path: '/profile',
+      name: 'profile',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/ProfileView.vue')
+    }
   ],
 });
 
