@@ -12,7 +12,7 @@ import NavBar from './components/NavBar.vue';
 import { useStore } from 'vuex';
 
 const store = useStore();
-const isUserLoggedIn = computed(() => store.getters['isUserLoggedIn']);
+const isUserLoggedIn = computed(() => store.state['isUserLoggedIn']);
 
 </script>
 <style scoped>

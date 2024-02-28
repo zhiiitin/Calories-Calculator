@@ -5,65 +5,37 @@
       hover
       color="#FCFCFC"
       rounded="xl"
-      :max-width="nextStep ? 900 : 400"
+      :max-width="settingStep === 1 ? 900 : 400"
       elevation="24"
     >
-      <template v-if="!nextStep">
+      <template v-if="settingStep === 0">
         <v-card-title>
           Welcome！歡迎您的加入<br />
           請先填寫下列資料</v-card-title
         >
         <v-form>
-          <v-radio-group inline class="d-flex justify-center mt-3 mb-8">
-            <v-radio label="男" value="one"></v-radio>
-            <v-radio label="女" value="two"></v-radio>
+          <v-radio-group v-model="userProfile.sex" inline class="d-flex justify-center mt-3 mb-8">
+            <v-radio label="男" value="1"></v-radio>
+            <v-radio label="女" value="0"></v-radio>
           </v-radio-group>
-          <v-menu
-            ref="menu"
-            v-model="menuActive"
-            :close-on-content-click="false"
-            transition="scale-transition"
-            min-width="auto"
-          >
-            <template v-slot:activator="{ props }">
-              <v-text-field
-                v-model="_birthDate"
-                label="出生日期"
-                prepend-inner-icon="mdi-calendar"
-                readonly
-                v-bind="props"
-                variant="outlined"
-                density="comfortable"
-              >
-              </v-text-field>
-            </template>
-            <v-date-picker
-              hide-actions
-              v-model="birthDate"
-              hide-header="true"
-              color="grey-lighten-2"
-              elevation="12"
-              header="出生日期"
-              viewMode="year"
-              rounded="lg"
-              :max="
-                new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
-                  .toISOString()
-                  .substr(0, 10)
-              "
-              min="1950-01-01"
-            >
-            </v-date-picker>
-          </v-menu>
+          <DatePicker
+            :selectedDate="userProfile.birthDate"
+            @update:selectedDate="updateBirthDate"
+          ></DatePicker>
           <v-text-field
-            v-model="height"
+            v-model="userProfile.height"
             type="number"
             label="身高(cm)"
             variant="outlined"
             density="comfortable"
           >
           </v-text-field>
-          <v-text-field v-model="weight" label="體重(kg)" variant="outlined" density="comfortable">
+          <v-text-field
+            v-model="userProfile.weight"
+            label="體重(kg)"
+            variant="outlined"
+            density="comfortable"
+          >
           </v-text-field>
         </v-form>
         <v-btn
@@ -71,10 +43,11 @@
           width="80"
           variant="tonal"
           text="下一步"
-          @click="nextStep = !nextStep"
+          @click="settingStep = 1"
+          :disabled="!isAllowToStepTwo"
         />
       </template>
-      <template v-else>
+      <template v-else-if="settingStep === 1">
         <v-card-title> 請選擇活動程度</v-card-title>
         <v-container>
           <v-row justify="center">
@@ -92,25 +65,28 @@
           width="80"
           variant="tonal"
           text="下一步"
-          @click="nextStep = !nextStep"
+          @click="createUserProfile()"
           :disabled="!isExerciseLevelSelected"
         />
+      </template>
+      <template v-else>
+        <div>
+          <v-card-title>請稍候，建立資料中...</v-card-title>
+          <v-progress-circular class="my-8" :size="40" :width="5" indeterminate color="grey-darken-1"></v-progress-circular>
+        </div>
       </template>
     </v-card>
   </v-container>
 </template>
 <script setup>
 import { ref, computed } from 'vue'
-import dayjs from 'dayjs'
 import ExerciseIntensityCard from '@/components/ExerciseIntensityCard.vue'
+import DatePicker from '@/components/DatePicker.vue'
+import { useVuelidate } from '@vuelidate/core'
+import { numeric, required, helpers } from '@vuelidate/validators'
+import { createProfile } from '../service/profileService'
 
-const birthDate = ref()
-const menuActive = ref(false)
-const nextStep = ref(false)
-
-const _birthDate = computed(() =>
-  birthDate.value ? dayjs(birthDate.value).format('YYYY-MM-DD') : ''
-)
+const settingStep = ref(0)
 
 const exerciseIntensityLevels = ref([
   {
@@ -160,11 +136,47 @@ const exerciseIntensityLevels = ref([
   }
 ])
 
-const isExerciseLevelSelected = computed(() => exerciseIntensityLevels.value.some((item) => item.isSelected))
+const isExerciseLevelSelected = computed(() =>
+  exerciseIntensityLevels.value.some((item) => item.isSelected)
+)
 
+const userProfile = ref({
+  sex: null,
+  height: '',
+  weight: '',
+  birthDate: '',
+  tdee: null,
+  bmr: null,
+  bmi: null
+})
 
-const height = ref()
-const weight = ref()
+const userProfileRules = {
+  sex: {
+    required: helpers.withMessage('此欄位為必填', required)
+  },
+  birthDate: {
+    required: helpers.withMessage('此欄位為必填', required)
+  },
+  height: {
+    required: helpers.withMessage('此欄位為必填', required),
+    umeric: helpers.withMessage('此欄位需為正數', numeric)
+  },
+  weight: {
+    required: helpers.withMessage('此欄位為必填', required),
+    umeric: helpers.withMessage('此欄位需為正數', numeric)
+  }
+}
+
+const v$ = useVuelidate(userProfileRules, userProfile)
+const isAllowToStepTwo = computed(() => {
+  v$.value.$validate()
+  if (v$.value.$error) {
+    return false
+  }
+  return true
+})
+
+const exerciseLevel = ref(0)
 
 // 選擇運動強度，若有已選擇的item 狀態改回false
 const selectedIntensity = (selectData) => {
@@ -174,6 +186,54 @@ const selectedIntensity = (selectData) => {
     }
   })
   selectData.isSelected = true
+  exerciseLevel.value = selectData.value
+}
+
+// emit 事件接收birthDate值變化
+const updateBirthDate = (updatedDate) => {
+  userProfile.value.birthDate = updatedDate
+}
+
+// 建立使用者個人詳細資料
+const createUserProfile = async () => {
+  settingStep.value = 2 ;
+  const height = userProfile.value.height
+  const weight = userProfile.value.weight
+  const sex = userProfile.value.sex
+  const age = calculateAge(userProfile.value.birthDate)
+
+  userProfile.value.bmi = calculateBmi(height, weight)
+  userProfile.value.bmr = calculateBmr(age, height, weight, sex)
+  userProfile.value.tdee = calculateTdee(userProfile.value.bmr)
+
+  const result = await createProfile(userProfile.value)
+  console.log(result)
+}
+
+// 計算BMI
+const calculateBmi = (height, weight) => {
+  const _height = height / 100
+  const bmi = weight / (_height * _height)
+  return bmi
+}
+
+// 計算BMR
+const calculateBmr = (age, height, weight, sex) => {
+  const bmr = weight * 9.99 + height * 6.25 - age * 4.92 + (166 * sex - 161)
+  return bmr
+}
+
+// 計算年齡
+const calculateAge = (birthDate) => {
+  const ageDifMs = Date.now() - new Date(birthDate).getTime()
+  const ageDate = new Date(ageDifMs)
+  return Math.abs(ageDate.getUTCFullYear() - 1970)
+}
+// 計算TDEE
+const calculateTdee = (bmr) => {
+  const mutiple = exerciseLevel.value
+  const tdee = bmr * mutiple
+  return tdee
 }
 </script>
 <style scoped></style>

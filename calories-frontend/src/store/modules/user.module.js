@@ -4,12 +4,16 @@ export default {
   state() {
     return {
       user: getUserData() || null,
+      isUserLoggedIn : false,
     };
   },
   mutations: {
     setUserData(state, userData) {
       state.user = userData;
     },
+    setUserLoggedIn(state, isUserLoggedIn) {
+      state.isUserLoggedIn = isUserLoggedIn;
+    }
   },
   actions: {
     async registerUser({ commit }, data) {
@@ -28,11 +32,6 @@ export default {
         commit('setUserData', response.data.user);
       }
       return response;
-    },
-  },
-  getters: {
-    isUserLoggedIn(state) {
-      return state.user !== null;
     },
   },
 };

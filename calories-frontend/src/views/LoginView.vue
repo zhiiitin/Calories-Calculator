@@ -2,125 +2,124 @@
   <div class="login-container d-flex align-center">
     <v-container>
       <transition name="fade" @before-enter="onBeforeEnter" @enter="onEnter" @leave="onLeave">
-        <template v-if="!hasFirstSet">  
-        <v-card
-          class="mx-auto pa-12"
-          hover
-          color="#FCFCFC"
-          rounded="xl"
-          max-width="400"
-          elevation="24"
-        >
-          <template #title>
-            <div @click.prevent="setTestData()">
-              {{ isRegisterMode ? '註冊會員' : '登入會員' }}
-            </div>
-          </template>
-
-          <transition name="fade" @before-enter="onBeforeEnter" @enter="onEnter" @leave="onLeave">
-            <template v-if="!isRegisterMode">
-              <v-form class="mt-5">
-                <v-text-field
-                  v-model="loginData.email"
-                  label="信箱"
-                  variant="outlined"
-                  density="comfortable"
-                  placeholder="請輸入信箱"
-                  prepend-inner-icon="mdi-email"
-                />
-                <v-text-field
-                  v-model="loginData.password"
-                  :type="showPassword ? 'text' : 'password'"
-                  :append-inner-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                  label="密碼"
-                  variant="outlined"
-                  density="comfortable"
-                  placeholder="請輸入密碼"
-                  prepend-inner-icon="mdi-lock"
-                  @click:append-inner="showPassword = !showPassword"
-                />
-              </v-form>
+        <template v-if="!hasFirstSetting">
+          <v-card
+            class="mx-auto pa-12"
+            hover
+            color="#FCFCFC"
+            rounded="xl"
+            max-width="400"
+            elevation="24"
+          >
+            <template #title>
+              <div @click.prevent="setTestData()">
+                {{ isRegisterMode ? '註冊會員' : '登入會員' }}
+              </div>
             </template>
-            <template v-else>
-              <v-form class="mt-5">
-                <v-text-field
-                  v-model="registerData.email"
-                  label="信箱"
-                  variant="outlined"
-                  density="comfortable"
-                  placeholder="請輸入信箱"
-                  required
-                  prepend-inner-icon="mdi-email"
-                  :error-messages="emailErrorMsg"
-                  @input="v$.email.$touch"
-                  @blur="v$.email.$touch"
-                />
-                <v-text-field
-                  v-if="isRegisterMode"
-                  v-model="registerData.userName"
-                  label="使用者名稱"
-                  variant="outlined"
-                  density="comfortable"
-                  placeholder="請輸入使用者名稱"
-                  prepend-inner-icon="mdi-account"
-                  :error-messages="userNameErrorMsg"
-                  @input="v$.userName.$touch"
-                  @blur="v$.userName.$touch"
-                />
-                <v-text-field
-                  v-model="registerData.password"
-                  :type="showPassword ? 'text' : 'password'"
-                  :append-inner-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                  prepend-inner-icon="mdi-lock"
-                  label="密碼"
-                  variant="outlined"
-                  density="comfortable"
-                  placeholder="請輸入密碼"
-                  :error-messages="passwordErrorMsg"
-                  @input="v$.password.$touch"
-                  @blur="v$.password.$touch"
-                  @click:append-inner="showPassword = !showPassword"
-                />
-                <v-text-field
-                  v-model="registerData.passwordCheck"
-                  :type="showPassword ? 'text' : 'password'"
-                  :append-inner-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                  prepend-inner-icon="mdi-lock"
-                  label="確認"
-                  variant="outlined"
-                  density="comfortable"
-                  placeholder="請輸入確認密碼"
-                  :error-messages="passwordCheckErrorMsg"
-                  @input="v$.passwordCheck.$touch"
-                  @blur="v$.passwordCheck.$touch"
-                  @click:append-inner="showPassword = !showPassword"
-                />
-              </v-form>
-            </template>
-          </transition>
-          <v-btn
-            type="submit"
-            class="mt-5 custom-btn"
-            width="500"
-            :class="isRegisterMode ? 'mb-5' : ''"
-            variant="tonal"
-            :text="isRegisterMode ? '註冊' : '登入'"
-            @click="isRegisterMode ? handleSubmit() : handleLogin()"
-          />
-          <v-row>
-            <v-card-text class="text-center mt-3" @click.prevent="handleRegister">
-              <a class="text-black text-decoration-none"
-                >{{ isRegisterMode ? '已有帳號嗎? 點擊登入' : '立即註冊' }}
-                <v-icon icon="mdi-chevron-right" />
-              </a>
-            </v-card-text>
-          </v-row>
-        </v-card>
-      </template>
-      <template v-else>
-        <ProfileSettingView></ProfileSettingView>
 
-      </template>
+            <transition name="fade" @before-enter="onBeforeEnter" @enter="onEnter" @leave="onLeave">
+              <template v-if="!isRegisterMode">
+                <v-form class="mt-5">
+                  <v-text-field
+                    v-model="loginData.email"
+                    label="信箱"
+                    variant="outlined"
+                    density="comfortable"
+                    placeholder="請輸入信箱"
+                    prepend-inner-icon="mdi-email"
+                  />
+                  <v-text-field
+                    v-model="loginData.password"
+                    :type="showPassword ? 'text' : 'password'"
+                    :append-inner-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                    label="密碼"
+                    variant="outlined"
+                    density="comfortable"
+                    placeholder="請輸入密碼"
+                    prepend-inner-icon="mdi-lock"
+                    @click:append-inner="showPassword = !showPassword"
+                  />
+                </v-form>
+              </template>
+              <template v-else>
+                <v-form class="mt-5">
+                  <v-text-field
+                    v-model="registerData.email"
+                    label="信箱"
+                    variant="outlined"
+                    density="comfortable"
+                    placeholder="請輸入信箱"
+                    required
+                    prepend-inner-icon="mdi-email"
+                    :error-messages="emailErrorMsg"
+                    @input="v$.email.$touch"
+                    @blur="v$.email.$touch"
+                  />
+                  <v-text-field
+                    v-if="isRegisterMode"
+                    v-model="registerData.userName"
+                    label="使用者名稱"
+                    variant="outlined"
+                    density="comfortable"
+                    placeholder="請輸入使用者名稱"
+                    prepend-inner-icon="mdi-account"
+                    :error-messages="userNameErrorMsg"
+                    @input="v$.userName.$touch"
+                    @blur="v$.userName.$touch"
+                  />
+                  <v-text-field
+                    v-model="registerData.password"
+                    :type="showPassword ? 'text' : 'password'"
+                    :append-inner-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                    prepend-inner-icon="mdi-lock"
+                    label="密碼"
+                    variant="outlined"
+                    density="comfortable"
+                    placeholder="請輸入密碼"
+                    :error-messages="passwordErrorMsg"
+                    @input="v$.password.$touch"
+                    @blur="v$.password.$touch"
+                    @click:append-inner="showPassword = !showPassword"
+                  />
+                  <v-text-field
+                    v-model="registerData.passwordCheck"
+                    :type="showPassword ? 'text' : 'password'"
+                    :append-inner-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                    prepend-inner-icon="mdi-lock"
+                    label="確認"
+                    variant="outlined"
+                    density="comfortable"
+                    placeholder="請輸入確認密碼"
+                    :error-messages="passwordCheckErrorMsg"
+                    @input="v$.passwordCheck.$touch"
+                    @blur="v$.passwordCheck.$touch"
+                    @click:append-inner="showPassword = !showPassword"
+                  />
+                </v-form>
+              </template>
+            </transition>
+            <v-btn
+              type="submit"
+              class="mt-5 custom-btn"
+              width="500"
+              :class="isRegisterMode ? 'mb-5' : ''"
+              variant="tonal"
+              :text="isRegisterMode ? '註冊' : '登入'"
+              @click="isRegisterMode ? handleSubmit() : handleLogin()"
+            />
+            <v-row>
+              <v-card-text class="text-center mt-3" @click.prevent="handleRegister">
+                <a class="text-black text-decoration-none"
+                  >{{ isRegisterMode ? '已有帳號嗎? 點擊登入' : '立即註冊' }}
+                  <v-icon icon="mdi-chevron-right" />
+                </a>
+              </v-card-text>
+            </v-row>
+          </v-card>
+        </template>
+        <template v-else>
+          <ProfileSettingView></ProfileSettingView>
+        </template>
       </transition>
     </v-container>
   </div>
@@ -146,6 +145,7 @@ const dialogTitle = ref()
 const showPassword = ref(false)
 const isRegisterMode = ref(false)
 const showMessageDialog = ref(false)
+const hasFirstSetting = ref(false)
 
 const store = useStore()
 const router = useRouter()
@@ -171,8 +171,6 @@ const registerData = ref({
 const loginData = ref({
   ...initLoginData
 })
-
-const hasFirstSet = ref(false)
 
 const registerRules = {
   email: {
@@ -216,16 +214,17 @@ const handleSubmit = async () => {
 
 // 登入
 const handleLogin = async () => {
-  const result = await store.dispatch('loginUser', loginData.value)
-  hasFirstSet.value = result.data?.user?.hasFirstSet;
-  if (result.status === 200) {
-    if(!hasFirstSet.value){
-      router.push('/');
-    }
-  } else {
+  const result = await store.dispatch('loginUser', loginData.value) 
+  if (result.status !== 200) {
     showDialog('登入失敗', '請檢查此信箱是否存在')
+    return
   }
-  console.log(hasFirstSet.value,result.data?.user?.hasFirstSet);
+  if (result.data?.user?.isFirstSet) {
+    hasFirstSetting.value = result.data?.user?.isFirstSet;
+  } else {
+    router.push('/')
+    store.commit('setUserLoggedIn',true);
+  }
 }
 
 const handleRegister = () => {
